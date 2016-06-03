@@ -1,0 +1,38 @@
+NAME="hunspell-es"
+VERSION=0.7
+RELEASE=1
+CATEGORY="Text"
+SUMMARY="Spanish dictionary for Hunspell"
+DESCRIPTION="Hunspell is a spell checker and morphological analyzer library
+and program designed for languages with rich morphology and complex
+compounding or character encoding.
+This package provides a Spanish dictionary for Hunspell."
+HOMEPAGE="http://rla-es.forja.rediris.es/"
+#SRC_URI="http://forja.rediris.es/frs/download.php/2890/es_ANY.oxt"
+md5sum=e6035c917eb9b874a3c19636a417c4b5
+SRC_URI="http://pkgs.fedoraproject.org/repo/pkgs/hunspell-es/es_ANY.oxt/${md5sum}/es_ANY.oxt"
+SRC_DIR=.
+
+CYGPORT_USE_UNSTABLE_API=1
+src_unpack_hook() {
+	check_prog_req unzip
+	unzip ${SRC_URI##*/}
+}
+
+src_compile() { :; }
+
+src_install() {
+	cd ${S}
+	insinto /usr/share/myspell
+	newins es_ANY.aff es_ES.aff
+	newins es_ANY.dic es_ES.dic
+
+	for l in es_AR es_BO es_CL es_CO es_CR es_CU es_DO es_EC es_GT es_HN \
+		 es_MX es_NI es_PA es_PE es_PR es_PY es_SV es_US es_UY es_VE
+	do
+		dosym es_ES.aff /usr/share/myspell/$l.aff
+		dosym es_ES.dic /usr/share/myspell/$l.dic
+	done
+
+	dodoc *.txt
+}
